@@ -1,0 +1,7 @@
+.confirmContainer {
+  background-color: lightyellow;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  width: 50%;
+}

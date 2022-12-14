@@ -1,0 +1,16 @@
+.app{
+  background-color: whitesmoke;
+  color: darkblue;
+  font-size: 1.2rem;
+  width: 100%;
+}
+
+.signSectionClass{
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  left:auto;
+  right: auto;
+  width: 100%;
+  padding: 10px;
+}

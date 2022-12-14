@@ -1,0 +1,17 @@
+.radioClass {
+  font-size: 0.8rem;
+  margin: 5px;
+}
+
+.radioClass legend {
+  margin: 2px;
+}
+
+.radioClass label {
+  font-size: 0.8rem;
+  margin: 2px;
+}
+
+.radioClass input[type='radio' i] {
+  background-color: var(--main-bg-color) !important;
+}

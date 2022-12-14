@@ -1,0 +1,25 @@
+.LoginPage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  padding: 15px;
+  left: auto;
+  right: auto;
+  width: 46%;
+}
+
+h1 {
+  width: 100%;
+}
+form {
+  position: relative;
+  left: auto;
+  right: auto;
+  width: 100%;
+  margin-bottom: 10px;
+}
+Button {
+  clear: left;
+  margin: 5px;
+}

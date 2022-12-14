@@ -1,0 +1,10 @@
+.pageClass {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+h2 {
+  padding: 15px;
+  width: 100%;
+}

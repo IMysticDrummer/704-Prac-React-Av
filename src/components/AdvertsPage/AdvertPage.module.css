@@ -1,0 +1,68 @@
+.adContainerClass {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.adContainerClass p {
+  margin: 3px;
+}
+
+.sellParagraph {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 5px;
+  width: 100%;
+}
+
+.sell {
+  color: darkgreen;
+}
+.buy {
+  color: blueviolet;
+}
+.product,
+.price {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 5px;
+  width: 48%;
+}
+.price {
+  text-align: center;
+}
+.imgContainer {
+  min-height: 100px;
+  min-width: 100px;
+  height: 300px;
+  width: 100%;
+  border-radius: 3px;
+  border: solid 1px var(--main-color);
+  clear: both;
+  margin: auto;
+}
+.imgContainer img {
+  min-height: 100px;
+  min-width: 100px;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.tags {
+  width: 100%;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.created {
+  width: 100%;
+}
+
+.date {
+  font-weight: bold;
+}
+
+button {
+  margin-left: 0;
+}

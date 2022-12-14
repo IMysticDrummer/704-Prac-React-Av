@@ -1,0 +1,32 @@
+.selectClass {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin: 3px;
+}
+
+.selectClass label {
+  margin: 2px;
+  width: 100%;
+  font-size: 0.8rem;
+}
+
+.selectClass select {
+  padding: 5px;
+  margin: 2px;
+  border-radius: 3px;
+  background-color: var(--main-bg-color);
+  border-width: 2px;
+  color: var(--main-color);
+}
+
+.selectClass option:checked {
+  background-color: var(--resalted-bg-color);
+  color: var(--resalted-color);
+}
+
+.selectClass button {
+  margin: 2px;
+  font-size: 0.8rem;
+}
