@@ -2,6 +2,7 @@ import {
   AUTH_LOGIN_REQUEST,
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGIN_FAILURE,
+  AUTH_LOGOUT,
 } from './types.js';
 
 export function authLoginRequest() {
@@ -19,5 +20,11 @@ export function authLoginSuccess() {
 export function authLoginFailure() {
   return {
     type: AUTH_LOGIN_FAILURE,
+  };
+}
+
+export function authLogout() {
+  return {
+    type: AUTH_LOGOUT,
   };
 }
