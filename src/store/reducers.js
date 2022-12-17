@@ -5,18 +5,17 @@ import {
 } from './types.js';
 
 const defaultState = {
-  isLogged: false,
+  auth: false,
 };
 
-export default function reducer(state = defaultState, action) {
+export function auth(state = defaultState.auth, action) {
   switch (action.type) {
     case AUTH_LOGIN_REQUEST:
-      return { ...state, isLogged: false };
+      return false;
     case AUTH_LOGIN_SUCCESS:
-      return { ...state, isLogged: true };
+      return true;
     case AUTH_LOGIN_FAILURE:
-      return { ...state, isLogged: false };
-
+      return false;
     default:
       return state;
   }

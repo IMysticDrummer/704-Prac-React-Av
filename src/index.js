@@ -8,9 +8,9 @@ import { OptionsContexProvider } from './components/AdvertsPage/optionsContex';
 import Root from './Root';
 import configureStore from './store';
 
-const store = configureStore();
 //Test if it's initially logged
-const accessToken = checkLogged({ isLogged: false });
+const accessToken = checkLogged();
+const store = configureStore({ auth: !!accessToken });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
