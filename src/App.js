@@ -22,7 +22,7 @@ function App() {
               <Layout title={title} />
               <Page subTitle='Sign up / Login for a full experience!!'>
                 <LoginPage />
-                <LoginPage isSignUp='true' />
+                <LoginPage isSignUp />
               </Page>
             </Fragment>
           }
@@ -35,8 +35,7 @@ function App() {
 
         <Route
           path='/adverts'
-          element={<Layout title={title} />}
-        >
+          element={<Layout title={title} />}>
           <Route
             index
             element={

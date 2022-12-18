@@ -3,6 +3,7 @@ import {
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGIN_FAILURE,
   AUTH_LOGOUT,
+  TAGS_LOADED,
 } from './types.js';
 
 export function authLoginRequest() {
@@ -26,5 +27,12 @@ export function authLoginFailure() {
 export function authLogout() {
   return {
     type: AUTH_LOGOUT,
+  };
+}
+
+export function tagsLoaded(tags) {
+  return {
+    type: TAGS_LOADED,
+    payload: tags,
   };
 }

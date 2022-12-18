@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import styles from './LoginPage.module.css';
 import { login, signup } from './service';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useLogin } from './context';
 import ErrorElement from '../common/ErrorElement';
 import { Button } from '../common/Button';
 import styled from 'styled-components';
@@ -22,7 +21,6 @@ const LoginPage = ({ isSignUp, className, ...props }) => {
   const [isFetching, setIsFetching] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  //const { setLoginTrue: onLogin } = useLogin();
   const dispatch = useDispatch();
 
   const enterElementHandleChange = (event) => {
@@ -81,7 +79,7 @@ const LoginPage = ({ isSignUp, className, ...props }) => {
         await login({ email, password });
         afterApiLogin();
       } catch (error) {
-        error.message = 'This user o passwors are incorrect';
+        error.message = 'This user o password are incorrect';
         setError(error);
       }
     }

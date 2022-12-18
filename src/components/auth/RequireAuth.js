@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
 import { getIsLogged } from '../../store/selectors';
-import { useLogin } from './context';
 
 /**
  * Doing authorisation control (must be loggedin). If not, this redirect to the login page
@@ -9,7 +8,6 @@ import { useLogin } from './context';
  * @returns
  */
 const RequireAuth = ({ children }) => {
-  //const { isLogged } = useLogin();
   const isLogged = useSelector(getIsLogged);
   const location = useLocation();
   if (!isLogged) {

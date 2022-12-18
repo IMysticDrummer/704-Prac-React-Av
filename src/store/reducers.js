@@ -4,10 +4,12 @@ import {
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGIN_FAILURE,
   AUTH_LOGOUT,
+  TAGS_LOADED,
 } from './types.js';
 
 const defaultState = {
   auth: false,
+  tags: [],
 };
 
 export function auth(state = defaultState.auth, action) {
@@ -21,6 +23,16 @@ export function auth(state = defaultState.auth, action) {
     case AUTH_LOGOUT:
       handleLogout();
       return false;
+    default:
+      return state;
+  }
+}
+
+export function tags(state = defaultState.tags, action) {
+  switch (action.type) {
+    case TAGS_LOADED:
+      return action.payload;
+
     default:
       return state;
   }

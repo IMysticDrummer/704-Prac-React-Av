@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { authLogout } from '../../store/actions';
 import { getIsLogged } from '../../store/selectors';
-import { useLogin } from '../auth/context';
 import { Button } from '../common/Button';
 import ConfirmElement from '../common/ConfirmElement';
 
@@ -15,7 +14,6 @@ import './Header.css';
  * @returns
  */
 const Header = ({ title }) => {
-  //const { isLogged, setLogout: onLogout } = useLogin();
   const isLogged = useSelector(getIsLogged);
   const dispatch = useDispatch();
   const [logoutRequired, setLogoutRequired] = useState(false);
@@ -27,7 +25,6 @@ const Header = ({ title }) => {
   const doingLogout = (response) => {
     if (response) {
       setLogoutRequired(false);
-      //onLogout();
       dispatch(authLogout());
     } else {
       setLogoutRequired(false);
@@ -42,8 +39,7 @@ const Header = ({ title }) => {
           <NavLink
             to='/adverts/new'
             className='navLink'
-            end
-          >
+            end>
             New Advertisement
           </NavLink>
         )}
@@ -51,8 +47,7 @@ const Header = ({ title }) => {
           <NavLink
             to='/adverts'
             className='navLink'
-            end
-          >
+            end>
             Advertisements list
           </NavLink>
         )}
