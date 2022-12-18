@@ -1,3 +1,4 @@
+import { login } from '../components/auth/service.js';
 import {
   AUTH_LOGIN_REQUEST,
   AUTH_LOGIN_SUCCESS,
@@ -28,6 +29,20 @@ export function authLoginFailure(error) {
     error: true,
   };
 }
+
+export const authLogin = (credentials) => {
+  const { email, password, remember } = credentials;
+  return async function (dispatch, getState) {
+    try {
+      dispatch(authLoginRequest());
+      await login({ email, password }, remember);
+      dispatch(authLoginSuccess());
+    } catch (error) {
+      dispatch(authLoginFailure(error));
+      throw error;
+    }
+  };
+};
 
 export function authLogout() {
   return {

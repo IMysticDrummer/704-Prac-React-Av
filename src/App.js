@@ -1,5 +1,6 @@
 import AdvertsPage from './components/AdvertsPage/AdvertsPage';
 import LoginPage from './components/auth/LoginPage';
+import SignupPage from './components/auth/SignupPage';
 import NewAdvertPage from './components/AdvertsPage/NewAdvertPage.js';
 import { Fragment } from 'react';
 import Layout from './components/Layout/Layout';
@@ -22,7 +23,7 @@ function App() {
               <Layout title={title} />
               <Page subTitle='Sign up / Login for a full experience!!'>
                 <LoginPage />
-                <LoginPage isSignUp />
+                <SignupPage />
               </Page>
             </Fragment>
           }
