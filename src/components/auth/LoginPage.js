@@ -9,6 +9,8 @@ import ErrorElement from '../common/ErrorElement';
 import { Button } from '../common/Button';
 import styled from 'styled-components';
 import Spinner from '../common/Spinner';
+import { useDispatch } from 'react-redux';
+import { authLoginSuccess } from '../../store/actions';
 
 const LoginPage = ({ isSignUp, className, ...props }) => {
   const [username, setUsername] = useState([]);
@@ -20,7 +22,8 @@ const LoginPage = ({ isSignUp, className, ...props }) => {
   const [isFetching, setIsFetching] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { setLoginTrue: onLogin } = useLogin();
+  //const { setLoginTrue: onLogin } = useLogin();
+  const dispatch = useDispatch();
 
   const enterElementHandleChange = (event) => {
     if (event.target.name === 'username') {
@@ -53,7 +56,7 @@ const LoginPage = ({ isSignUp, className, ...props }) => {
   };
 
   const afterApiLogin = () => {
-    onLogin();
+    dispatch(authLoginSuccess());
     const to = location.state?.from?.pathname || '/';
     navigate(to, { replace: true });
   };
@@ -140,8 +143,7 @@ const LoginPage = ({ isSignUp, className, ...props }) => {
         <Button
           variant='primary'
           type='submit'
-          disabled={disableButton()}
-        >
+          disabled={disableButton()}>
           {isSignUp ? 'Sign Up' : 'Login'}
         </Button>
       </form>
