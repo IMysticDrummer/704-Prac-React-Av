@@ -46,17 +46,30 @@ export function tags(state = defaultState.tags, action) {
 }
 
 export function ui(state = defaultState.ui, action) {
-  switch (action.type) {
-    case AUTH_LOGIN_REQUEST:
-      return { error: null, isLoading: true };
-    case AUTH_LOGIN_SUCCESS:
-      return { error: null, isLoading: false };
-    case AUTH_LOGIN_FAILURE:
-      return { error: action.payload, isLoading: false };
-    case UI_RESET_ERROR:
-      return { ...state, error: null };
-
-    default:
-      return state;
+  // Any case in error. For example AUTH_LOGIN_FAILURE
+  if (action.error) {
+    return { error: action.payload, isLoading: false };
   }
+
+  if (/_REQUEST$/.test(action.type)) {
+    return {
+      error: null,
+      isLoading: true,
+    };
+  }
+  //Toda acción que acabe en SUCCESS con expresiones regulares
+  if (/_SUCCESS$/.test(action.type)) {
+    return {
+      error: null,
+      isLoading: false,
+    };
+  }
+  if (action.type === UI_RESET_ERROR) {
+    return {
+      ...state,
+      error: null,
+    };
+  }
+
+  return state;
 }
