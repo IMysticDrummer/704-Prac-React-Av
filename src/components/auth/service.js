@@ -40,6 +40,8 @@ export const checkLogged = () => {
  * Removes the authorisation
  */
 export const handleLogout = () => {
-  removeAuthorizationHeader();
-  storage.remove('token');
+  return Promise.resolve().then(() => {
+    removeAuthorizationHeader();
+    storage.remove('token');
+  });
 };

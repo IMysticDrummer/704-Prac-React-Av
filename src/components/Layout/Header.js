@@ -27,6 +27,7 @@ const Header = ({ title }) => {
   const doingLogout = (response) => {
     if (response) {
       setLogoutRequired(false);
+      //onLogout();
       dispatch(authLogout());
     } else {
       setLogoutRequired(false);

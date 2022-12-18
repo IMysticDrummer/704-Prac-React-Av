@@ -1,3 +1,4 @@
+import { handleLogout } from '../components/auth/service.js';
 import {
   AUTH_LOGIN_REQUEST,
   AUTH_LOGIN_SUCCESS,
@@ -18,6 +19,7 @@ export function auth(state = defaultState.auth, action) {
     case AUTH_LOGIN_FAILURE:
       return false;
     case AUTH_LOGOUT:
+      handleLogout();
       return false;
     default:
       return state;
