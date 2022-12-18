@@ -8,8 +8,14 @@ import ErrorElement from '../common/ErrorElement';
 import { Button } from '../common/Button';
 import styled from 'styled-components';
 import Spinner from '../common/Spinner';
-import { useDispatch } from 'react-redux';
-import { authLoginSuccess } from '../../store/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  authLoginFailure,
+  authLoginRequest,
+  authLoginSuccess,
+  uiResetError,
+} from '../../store/actions';
+import { getUi } from '../../store/selectors';
 
 const LoginPage = ({ isSignUp, className, ...props }) => {
   const [username, setUsername] = useState([]);
@@ -17,11 +23,10 @@ const LoginPage = ({ isSignUp, className, ...props }) => {
   const [email, setEmail] = useState([]);
   const [name, setName] = useState([]);
   const [remember, setRemember] = useState(false);
-  const [error, setError] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isLoading: isFetching, error } = useSelector(getUi);
 
   const enterElementHandleChange = (event) => {
     if (event.target.name === 'username') {
@@ -63,31 +68,28 @@ const LoginPage = ({ isSignUp, className, ...props }) => {
     event.preventDefault();
     if (!isSignUp) {
       try {
-        setError(null);
-        setIsFetching(true);
+        dispatch(authLoginRequest());
         await login({ email, password }, remember);
         afterApiLogin();
       } catch (error) {
-        setError(error);
+        dispatch(authLoginFailure(error));
       }
-      setIsFetching(false);
     } else {
       try {
-        setError(null);
-        setIsFetching(true);
+        dispatch(authLoginRequest());
         await signup({ username, password, name, email });
         await login({ email, password });
         afterApiLogin();
       } catch (error) {
         error.message = 'This user o password are incorrect';
-        setError(error);
+        dispatch(authLoginFailure(error));
       }
     }
   };
 
   const handleErrorMessageClick = (event) => {
     event.preventDefault();
-    setError(null);
+    dispatch(uiResetError());
   };
 
   return (
