@@ -1,3 +1,4 @@
+import { getTags } from '../components/AdvertsPage/service.js';
 import { login } from '../components/auth/service.js';
 import {
   AUTH_LOGIN_REQUEST,
@@ -62,9 +63,24 @@ export function tagsSuccess(tags) {
     payload: tags,
   };
 }
-export function tagsFailure() {
+export function tagsFailure(error) {
   return {
     type: TAGS_FAILURE,
+    payload: error,
+    error: true,
+  };
+}
+
+export function getTagsAction() {
+  return async function (dispatch, getState) {
+    try {
+      dispatch(tagsRequest());
+      const tags = await getTags();
+      dispatch(tagsSuccess(tags));
+    } catch (error) {
+      dispatch(tagsFailure());
+      throw error;
+    }
   };
 }
 
