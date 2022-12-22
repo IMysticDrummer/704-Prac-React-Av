@@ -1,13 +1,12 @@
-import { handleLogout } from '../components/auth/service.js';
 import {
   AUTH_LOGIN_REQUEST,
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGIN_FAILURE,
-  AUTH_LOGOUT,
   TAGS_REQUEST,
   TAGS_SUCCESS,
   TAGS_FAILURE,
   UI_RESET_ERROR,
+  AUTH_LOGOUT_SUCCESS,
 } from './types.js';
 
 const defaultState = {
@@ -27,8 +26,7 @@ export function auth(state = defaultState.auth, action) {
       return true;
     case AUTH_LOGIN_FAILURE:
       return false;
-    case AUTH_LOGOUT:
-      handleLogout();
+    case AUTH_LOGOUT_SUCCESS:
       return false;
     default:
       return state;
@@ -64,6 +62,14 @@ export function ui(state = defaultState.ui, action) {
       isLoading: false,
     };
   }
+  if (/_CANCEL$/.test(action.type)) {
+    return {
+      ...state,
+      isLoading: false,
+      error: null,
+    };
+  }
+
   if (action.type === UI_RESET_ERROR) {
     return {
       ...state,

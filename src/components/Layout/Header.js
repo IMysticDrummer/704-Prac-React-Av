@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { authLogout } from '../../store/actions';
-import { getIsLogged } from '../../store/selectors';
+import { authLogout, authLogoutRequest } from '../../store/actions';
+import { getIsLogged, getUi } from '../../store/selectors';
 import { Button } from '../common/Button';
 import ConfirmElement from '../common/ConfirmElement';
 
@@ -16,19 +15,14 @@ import './Header.css';
 const Header = ({ title }) => {
   const isLogged = useSelector(getIsLogged);
   const dispatch = useDispatch();
-  const [logoutRequired, setLogoutRequired] = useState(false);
+  const { isLoading: logoutRequired } = useSelector(getUi);
 
   const handleLogout = () => {
-    setLogoutRequired(true);
+    dispatch(authLogoutRequest());
   };
 
   const doingLogout = (response) => {
-    if (response) {
-      setLogoutRequired(false);
-      dispatch(authLogout());
-    } else {
-      setLogoutRequired(false);
-    }
+    dispatch(authLogout(response));
   };
 
   return (
@@ -39,7 +33,8 @@ const Header = ({ title }) => {
           <NavLink
             to='/adverts/new'
             className='navLink'
-            end>
+            end
+          >
             New Advertisement
           </NavLink>
         )}
@@ -47,7 +42,8 @@ const Header = ({ title }) => {
           <NavLink
             to='/adverts'
             className='navLink'
-            end>
+            end
+          >
             Advertisements list
           </NavLink>
         )}
