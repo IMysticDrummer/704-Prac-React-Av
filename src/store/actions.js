@@ -1,5 +1,4 @@
 import { getTags } from '../components/AdvertsPage/service.js';
-import { handleLogout, login } from '../components/auth/service.js';
 import {
   AUTH_LOGIN_REQUEST,
   AUTH_LOGIN_SUCCESS,
@@ -35,11 +34,13 @@ export function authLoginFailure(error) {
 
 export const authLogin = (credentials) => {
   const { email, password, remember } = credentials;
-  return async function (dispatch, getState, { api }) {
+  return async function (dispatch, getState, { api, router }) {
     try {
       dispatch(authLoginRequest());
       await api.auth.login({ email, password }, remember);
       dispatch(authLoginSuccess());
+      const to = router.state.location.state?.from?.pathname || '/';
+      router.navigate(to, { replace: true });
     } catch (error) {
       dispatch(authLoginFailure(error));
     }
@@ -63,11 +64,13 @@ export function authLogoutCancel() {
 }
 
 export function authLogout(response) {
-  return async function (dispatch, getState, { api }) {
+  return async function (dispatch, getState, { api, router }) {
     if (response) {
       try {
         await api.auth.handleLogout();
         dispatch(authLogoutSuccess());
+        const to = router.state.location.state?.from?.pathname || '/';
+        router.navigate(to, { replace: true });
       } catch (error) {
         //TODO tratar el error
       }

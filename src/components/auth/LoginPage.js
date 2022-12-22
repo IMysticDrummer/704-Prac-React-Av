@@ -2,7 +2,7 @@ import { useState } from 'react';
 import EnterElement from '../common/EnterElement';
 import classNames from 'classnames';
 import styles from './LoginPage.module.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+
 import ErrorElement from '../common/ErrorElement';
 import { Button } from '../common/Button';
 import styled from 'styled-components';
@@ -15,8 +15,6 @@ const LoginPage = ({ className, ...props }) => {
   const [password, setPassword] = useState([]);
   const [email, setEmail] = useState([]);
   const [remember, setRemember] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoading: isFetching, error } = useSelector(getUi);
 
@@ -36,17 +34,10 @@ const LoginPage = ({ className, ...props }) => {
     return !(email.length !== 0 && password.length !== 0 && !isFetching);
   };
 
-  const afterApiLogin = () => {
-    const to = location.state?.from?.pathname || '/';
-    navigate(to, { replace: true });
-  };
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
-    dispatch(authLogin({ email, password, remember })).then(() => {
-      afterApiLogin();
-    });
+    dispatch(authLogin({ email, password, remember }));
   };
 
   const handleErrorMessageClick = (event) => {
@@ -85,7 +76,8 @@ const LoginPage = ({ className, ...props }) => {
         <Button
           variant='primary'
           type='submit'
-          disabled={disableButton()}>
+          disabled={disableButton()}
+        >
           Login
         </Button>
       </form>

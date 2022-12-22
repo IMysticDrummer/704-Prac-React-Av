@@ -5,9 +5,28 @@ import thunk from 'redux-thunk';
 import * as auth from '../components/auth/service';
 
 const reducer = combineReducers(reducers);
-const middlewares = [thunk.withExtraArgument({ api: { auth } })];
 
-export default function configureStore(preloadState) {
+const failureRedirections =
+  (router, redirections) => (store) => (next) => (action) => {
+    const result = next(action);
+    if (action.error) {
+      const redirection = redirections[action.payload.status];
+      if (redirection) {
+        router.navigate(redirection);
+      }
+    }
+
+    return result;
+  };
+
+export default function configureStore(preloadState, { router }) {
+  const middlewares = [
+    thunk.withExtraArgument({ api: { auth }, router }),
+    failureRedirections(router, {
+      401: '/login',
+      404: '/404',
+    }),
+  ];
   const store = createStore(
     reducer,
     preloadState,

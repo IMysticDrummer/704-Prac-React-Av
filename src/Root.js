@@ -1,10 +1,13 @@
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
+import { OptionsContexProvider } from './components/AdvertsPage/optionsContex';
 
-export default function Root({ store, children }) {
+export default function Root({ store, router, children }) {
   return (
     <Provider store={store}>
-      <Router>{children}</Router>
+      <OptionsContexProvider>
+        <RouterProvider router={router} />
+      </OptionsContexProvider>
     </Provider>
   );
 }
