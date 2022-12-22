@@ -35,14 +35,13 @@ export function authLoginFailure(error) {
 
 export const authLogin = (credentials) => {
   const { email, password, remember } = credentials;
-  return async function (dispatch, getState) {
+  return async function (dispatch, getState, { api }) {
     try {
       dispatch(authLoginRequest());
-      await login({ email, password }, remember);
+      await api.auth.login({ email, password }, remember);
       dispatch(authLoginSuccess());
     } catch (error) {
       dispatch(authLoginFailure(error));
-      throw error;
     }
   };
 };
@@ -64,10 +63,10 @@ export function authLogoutCancel() {
 }
 
 export function authLogout(response) {
-  return async function (dispatch, getState) {
+  return async function (dispatch, getState, { api }) {
     if (response) {
       try {
-        await handleLogout();
+        await api.auth.handleLogout();
         dispatch(authLogoutSuccess());
       } catch (error) {
         //TODO tratar el error
