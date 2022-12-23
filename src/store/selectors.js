@@ -1,4 +1,6 @@
-export const getIsLogged = (state) => state.auth;
+export const getIsLogged = (state) => state.auth.state;
+
+export const getIsLogginout = (state) => state.auth.askingLogout;
 
 export const getUi = (state) => state.ui;
 

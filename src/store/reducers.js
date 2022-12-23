@@ -6,10 +6,15 @@ import {
   UI_RESET_ERROR,
   AUTH_LOGOUT_SUCCESS,
   ADS_LOAD_SUCCESS,
+  AUTH_LOGOUT_REQUEST,
+  AUTH_LOGOUT_CANCEL,
 } from './types.js';
 
 export const defaultState = {
-  auth: false,
+  auth: {
+    state: false,
+    askingLogout: false,
+  },
   tags: {
     areLoaded: false,
     data: [],
@@ -27,13 +32,17 @@ export const defaultState = {
 export function auth(state = defaultState.auth, action) {
   switch (action.type) {
     case AUTH_LOGIN_REQUEST:
-      return false;
+      return { state: false, askingLogout: false };
     case AUTH_LOGIN_SUCCESS:
-      return true;
+      return { state: true, askingLogout: false };
     case AUTH_LOGIN_FAILURE:
-      return false;
+      return { state: false, askingLogout: false };
+    case AUTH_LOGOUT_REQUEST:
+      return { state: true, askingLogout: true };
     case AUTH_LOGOUT_SUCCESS:
-      return false;
+      return { state: false, askingLogout: false };
+    case AUTH_LOGOUT_CANCEL:
+      return { state: true, askingLogout: false };
     default:
       return state;
   }
@@ -63,7 +72,7 @@ export function ui(state = defaultState.ui, action) {
     return { error: action.payload, isLoading: false };
   }
 
-  if (/_REQUEST$/.test(action.type)) {
+  if (/_REQUEST$/.test(action.type) && !/_LOGOUT_/.test(action.type)) {
     return {
       error: null,
       isLoading: true,

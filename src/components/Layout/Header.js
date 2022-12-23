@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { authLogout, authLogoutRequest } from '../../store/actions';
-import { getIsLogged, getUi } from '../../store/selectors';
+import { getIsLogged, getIsLogginout } from '../../store/selectors';
 import { Button } from '../common/Button';
 import ConfirmElement from '../common/ConfirmElement';
 
@@ -15,8 +15,7 @@ import './Header.css';
 const Header = ({ title }) => {
   const isLogged = useSelector(getIsLogged);
   const dispatch = useDispatch();
-  const { isLoading: logoutRequired } = useSelector(getUi);
-
+  const logoutRequired = useSelector(getIsLogginout);
   const handleLogout = () => {
     dispatch(authLogoutRequest());
   };

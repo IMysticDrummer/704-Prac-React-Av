@@ -17,7 +17,10 @@ const router = createBrowserRouter([
   },
 ]);
 
-const store = configureStore({ auth: !!accessToken }, { router });
+const store = configureStore(
+  { auth: { state: !!accessToken, askingLogout: false } },
+  { router }
+);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
