@@ -6,10 +6,11 @@ import ErrorElement from '../common/ErrorElement.js';
 import RadioEnter from '../common/RadioEnter.js';
 import SelectElement from '../common/SelectElement.js';
 import Page from '../Layout/Page.js';
-import { useOptions } from './optionsContex.js';
 import { postNewAd } from './service.js';
 import styles from './NewAdvertPage.module.css';
 import Spinner from '../common/Spinner.js';
+import { useSelector } from 'react-redux';
+import { getTags } from '../../store/selectors.js';
 
 const NewAdvertPage = ({ subTitle }) => {
   const [form, setForm] = useState({
@@ -21,7 +22,7 @@ const NewAdvertPage = ({ subTitle }) => {
   const [error, setError] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const navigate = useNavigate();
-  const { tagOptions } = useOptions();
+  const tagOptions = useSelector(getTags);
 
   const disableButton = () => {
     const enable =

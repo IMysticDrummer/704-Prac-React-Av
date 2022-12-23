@@ -21,6 +21,10 @@ const failureRedirections =
   };
 
 export default function configureStore(preloadState, { router }) {
+  const state = {
+    ...reducers.defaultState,
+    ...preloadState,
+  };
   const middlewares = [
     thunk.withExtraArgument({ api: { auth, ads }, router }),
     failureRedirections(router, {
@@ -30,7 +34,7 @@ export default function configureStore(preloadState, { router }) {
   ];
   const store = createStore(
     reducer,
-    preloadState,
+    state,
     composeWithDevTools(applyMiddleware(...middlewares))
   );
   return store;

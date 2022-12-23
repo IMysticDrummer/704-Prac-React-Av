@@ -7,6 +7,9 @@ import {
   TAGS_LOAD_REQUEST,
   TAGS_LOAD_SUCCESS,
   TAGS_LOAD_FAILURE,
+  ADS_LOAD_REQUEST,
+  ADS_LOAD_SUCCESS,
+  ADS_LOAD_FAILURE,
   UI_RESET_ERROR,
   AUTH_LOGOUT_REQUEST,
   AUTH_LOGOUT_SUCCESS,
@@ -111,7 +114,38 @@ export function getTagsAction() {
       dispatch(tagsLoadSuccess(tags));
     } catch (error) {
       dispatch(tagsLoadFailure());
-      throw error;
+      //throw error;
+    }
+  };
+}
+
+export function adsLoadRequest() {
+  return {
+    type: ADS_LOAD_REQUEST,
+  };
+}
+export function adsLoadSuccess(ads) {
+  return {
+    type: ADS_LOAD_SUCCESS,
+    payload: ads,
+  };
+}
+export function adsLoadFailure(error) {
+  return {
+    type: ADS_LOAD_FAILURE,
+    payload: error,
+    error: true,
+  };
+}
+
+export function getAdsAction() {
+  return async function (dispatch, getState, { api }) {
+    try {
+      dispatch(adsLoadRequest());
+      const ads = await api.ads.getAdvertisements();
+      dispatch(adsLoadSuccess(ads));
+    } catch (error) {
+      dispatch(adsLoadFailure(error));
     }
   };
 }

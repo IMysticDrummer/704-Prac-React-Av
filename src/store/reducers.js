@@ -5,11 +5,16 @@ import {
   TAGS_LOAD_SUCCESS,
   UI_RESET_ERROR,
   AUTH_LOGOUT_SUCCESS,
+  ADS_LOAD_SUCCESS,
 } from './types.js';
 
 export const defaultState = {
   auth: false,
   tags: {
+    areLoaded: false,
+    data: [],
+  },
+  ads: {
     areLoaded: false,
     data: [],
   },
@@ -37,6 +42,15 @@ export function auth(state = defaultState.auth, action) {
 export function tags(state = defaultState.tags, action) {
   switch (action.type) {
     case TAGS_LOAD_SUCCESS:
+      return { areLoaded: true, data: action.payload };
+    default:
+      return state;
+  }
+}
+
+export function ads(state = defaultState.ads, action) {
+  switch (action.type) {
+    case ADS_LOAD_SUCCESS:
       return { areLoaded: true, data: action.payload };
     default:
       return state;
