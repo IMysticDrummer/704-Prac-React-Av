@@ -13,8 +13,10 @@ const ErrorElement = ({ error, altMessage, handleErrorMessageClick }) => {
         className={styles.errorMessageClass}
         onClick={handleErrorMessageClick}
       >
-        {error.message}
-        {-error.status || altMessage}
+        <span>
+          {error.message}
+          {-error.status || altMessage}
+        </span>
         <p></p>
         <p>Click in this message to continue</p>
       </section>

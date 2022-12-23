@@ -37,8 +37,10 @@ const EnterElement = ({ labelText, className, value, ...props }) => {
   };
   return (
     <article className={classNames(styles.enterElementClass, className)}>
-      <label htmlFor='inputElement'>{labelText}</label>
-      {element()}
+      <label>
+        <span>{labelText}</span>
+        {element()}
+      </label>
     </article>
   );
 };

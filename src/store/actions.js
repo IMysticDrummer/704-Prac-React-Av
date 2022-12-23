@@ -1,4 +1,4 @@
-import { getTags } from '../components/AdvertsPage/service.js';
+//import { getTags } from '../components/AdvertsPage/service.js';
 import {
   AUTH_LOGIN_REQUEST,
   AUTH_LOGIN_SUCCESS,
@@ -104,8 +104,8 @@ export function getTagsAction() {
   return async function (dispatch, getState) {
     try {
       dispatch(tagsRequest());
-      const tags = await getTags();
-      dispatch(tagsSuccess(tags));
+      //const tags = await getTags();
+      //dispatch(tagsSuccess(tags));
     } catch (error) {
       dispatch(tagsFailure());
       throw error;

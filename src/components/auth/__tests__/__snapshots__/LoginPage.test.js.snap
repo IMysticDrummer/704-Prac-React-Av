@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test de la página LoginPage Snapshot 1`] = `
+<div>
+  <section
+    class="LoginPage"
+  >
+    <h2>
+      Login
+    </h2>
+    <form>
+      <article
+        class="enterElementClass sc-bcXHqe hAGHhm"
+      >
+        <label>
+          <span>
+            Enter your email
+          </span>
+          <input
+            name="email"
+            placeholder="someone@mail.com"
+            type="email"
+            value=""
+          />
+        </label>
+      </article>
+      <article
+        class="enterElementClass sc-bcXHqe hAGHhm"
+      >
+        <label>
+          <span>
+            Enter your password
+          </span>
+          <input
+            name="password"
+            type="password"
+            value=""
+          />
+        </label>
+      </article>
+      <article
+        class="enterElementClass sc-bcXHqe hAGHhm"
+      >
+        <label>
+          <span>
+            Remember me
+          </span>
+          <input
+            name="remember"
+            type="checkbox"
+          />
+        </label>
+      </article>
+      <button
+        class="sc-gswNZR fjeFES"
+        disabled=""
+        type="submit"
+      >
+        Login
+      </button>
+    </form>
+  </section>
+</div>
+`;

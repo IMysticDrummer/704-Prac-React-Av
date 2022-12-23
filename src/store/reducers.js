@@ -9,7 +9,7 @@ import {
   AUTH_LOGOUT_SUCCESS,
 } from './types.js';
 
-const defaultState = {
+export const defaultState = {
   auth: false,
   tags: [],
   ui: {

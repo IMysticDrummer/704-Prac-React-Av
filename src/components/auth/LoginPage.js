@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { authLogin, uiResetError } from '../../store/actions';
 import { getUi } from '../../store/selectors';
 
-const LoginPage = ({ className, ...props }) => {
+export const LoginPage = ({ className, ...props }) => {
   const [password, setPassword] = useState([]);
   const [email, setEmail] = useState([]);
   const [remember, setRemember] = useState(false);
@@ -91,7 +91,7 @@ const LoginPage = ({ className, ...props }) => {
       {error?.status === 401 && (
         <ErrorElement
           error={error}
-          altMessage='Test your cable'
+          altMessage='Unathorized'
           handleErrorMessageClick={handleErrorMessageClick}
         />
       )}
