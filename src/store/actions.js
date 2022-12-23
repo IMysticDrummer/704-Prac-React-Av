@@ -1,11 +1,12 @@
 //import { getTags } from '../components/AdvertsPage/service.js';
+import { areTagsLoaded } from './selectors.js';
 import {
   AUTH_LOGIN_REQUEST,
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGIN_FAILURE,
-  TAGS_REQUEST,
-  TAGS_SUCCESS,
-  TAGS_FAILURE,
+  TAGS_LOAD_REQUEST,
+  TAGS_LOAD_SUCCESS,
+  TAGS_LOAD_FAILURE,
   UI_RESET_ERROR,
   AUTH_LOGOUT_REQUEST,
   AUTH_LOGOUT_SUCCESS,
@@ -80,34 +81,36 @@ export function authLogout(response) {
   };
 }
 
-export function tagsRequest() {
+export function tagsLoadRequest() {
   return {
-    type: TAGS_REQUEST,
+    type: TAGS_LOAD_REQUEST,
   };
 }
 
-export function tagsSuccess(tags) {
+export function tagsLoadSuccess(tags) {
   return {
-    type: TAGS_SUCCESS,
+    type: TAGS_LOAD_SUCCESS,
     payload: tags,
   };
 }
-export function tagsFailure(error) {
+export function tagsLoadFailure(error) {
   return {
-    type: TAGS_FAILURE,
+    type: TAGS_LOAD_FAILURE,
     payload: error,
     error: true,
   };
 }
 
 export function getTagsAction() {
-  return async function (dispatch, getState) {
+  return async function (dispatch, getState, { api }) {
+    const areLoaded = areTagsLoaded(getState());
+    if (areLoaded) return;
     try {
-      dispatch(tagsRequest());
-      //const tags = await getTags();
-      //dispatch(tagsSuccess(tags));
+      dispatch(tagsLoadRequest());
+      const tags = await api.ads.getTags();
+      dispatch(tagsLoadSuccess(tags));
     } catch (error) {
-      dispatch(tagsFailure());
+      dispatch(tagsLoadFailure());
       throw error;
     }
   };

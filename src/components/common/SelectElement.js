@@ -9,7 +9,7 @@ import { Button } from './Button';
  *   - **name** of the Select Element
  *   - current **value** of the Select Element. This could be an array if it's multiple options
  *   - **multiple**: boolean indicating if this Select could be multiple
- *   - **options** is an array of strings with the options to be shown
+ *   - **options** is an array of strings with the options to be shown. If not options are
  *   - **onChange** is the callback function to manager the onChange event
  *   - **handleReset** is the function to manager the onClick reset tags button
  * @returns {React.Component}

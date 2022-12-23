@@ -5,7 +5,6 @@ import styles from './AdvertsPage.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Page from '../Layout/Page';
 import FiltersAdsElement from '../FitersAdsElements/FiltersAdsElement';
-import { useOptions } from './optionsContex';
 import {
   enterFilterConfObject,
   selectFilterConfObject,
@@ -22,6 +21,9 @@ import {
 
 import { Button } from '../common/Button';
 import Spinner from '../common/Spinner';
+import { useDispatch, useSelector } from 'react-redux';
+import { getTags } from '../../store/selectors';
+import { getTagsAction } from '../../store/actions';
 
 /**
  * Advertisement component.
@@ -35,12 +37,17 @@ const AdvertsPage = ({ title, subTitle, className }) => {
   const [advertisements, setAdvertisements] = useState();
   const [filters, setFilters] = useState({ sellFilter: '', tags: [] });
   const [isFetching, setIsFetching] = useState(false);
+  const dispatch = useDispatch();
 
-  const { tagOptions } = useOptions();
+  const tagOptions = useSelector(getTags);
 
   const Navigate = useNavigate();
 
   useEffect(() => {
+    const getTags = () => {
+      dispatch(getTagsAction());
+    };
+    getTags();
     const getAds = async () => {
       let adsList;
       try {
@@ -53,7 +60,7 @@ const AdvertsPage = ({ title, subTitle, className }) => {
       setIsFetching(false);
     };
     getAds();
-  }, []);
+  }, [dispatch]);
 
   const sectionClassName = classNames(className, styles.AdvertsPageCommon, {
     [styles.empty]: !advertisements,

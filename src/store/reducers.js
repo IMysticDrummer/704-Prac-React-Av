@@ -2,16 +2,17 @@ import {
   AUTH_LOGIN_REQUEST,
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGIN_FAILURE,
-  TAGS_REQUEST,
-  TAGS_SUCCESS,
-  TAGS_FAILURE,
+  TAGS_LOAD_SUCCESS,
   UI_RESET_ERROR,
   AUTH_LOGOUT_SUCCESS,
 } from './types.js';
 
 export const defaultState = {
   auth: false,
-  tags: [],
+  tags: {
+    areLoaded: false,
+    data: [],
+  },
   ui: {
     isLoading: false,
     error: null,
@@ -35,9 +36,8 @@ export function auth(state = defaultState.auth, action) {
 
 export function tags(state = defaultState.tags, action) {
   switch (action.type) {
-    case TAGS_SUCCESS:
-      return action.payload;
-
+    case TAGS_LOAD_SUCCESS:
+      return { areLoaded: true, data: action.payload };
     default:
       return state;
   }
