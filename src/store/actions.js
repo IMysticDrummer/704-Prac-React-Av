@@ -1,5 +1,5 @@
 //import { getTags } from '../components/AdvertsPage/service.js';
-import { areTagsLoaded } from './selectors.js';
+import { areTagsLoaded, getAdById } from './selectors.js';
 import {
   AUTH_LOGIN_REQUEST,
   AUTH_LOGIN_SUCCESS,
@@ -14,6 +14,9 @@ import {
   AUTH_LOGOUT_REQUEST,
   AUTH_LOGOUT_SUCCESS,
   AUTH_LOGOUT_CANCEL,
+  ADBYID_LOAD_REQUEST,
+  ADBYID_LOAD_SUCCESS,
+  ADBYID_LOAD_FAILURE,
 } from './types.js';
 
 export function authLoginRequest() {
@@ -146,6 +149,40 @@ export function getAdsAction() {
       dispatch(adsLoadSuccess(ads));
     } catch (error) {
       dispatch(adsLoadFailure(error));
+    }
+  };
+}
+
+export function adByIdLoadRequest() {
+  return {
+    type: ADBYID_LOAD_REQUEST,
+  };
+}
+export function adByIdLoadSuccess(ad) {
+  return {
+    type: ADBYID_LOAD_SUCCESS,
+    payload: ad,
+  };
+}
+export function adByIdLoadFailure(error) {
+  return {
+    type: ADBYID_LOAD_FAILURE,
+    payload: error,
+    error: true,
+  };
+}
+
+export function adByIdLoadAction(id) {
+  return async function (dispatch, getState, { api, route }) {
+    const areLoaded = getAdById(id)(getState());
+    if (areLoaded) return;
+
+    try {
+      dispatch(adByIdLoadRequest());
+      const advert = await api.ads.getAdById(id);
+      dispatch(adByIdLoadSuccess(advert));
+    } catch (error) {
+      dispatch(adByIdLoadFailure(error));
     }
   };
 }

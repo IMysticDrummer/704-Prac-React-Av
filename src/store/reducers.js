@@ -8,6 +8,7 @@ import {
   ADS_LOAD_SUCCESS,
   AUTH_LOGOUT_REQUEST,
   AUTH_LOGOUT_CANCEL,
+  ADBYID_LOAD_SUCCESS,
 } from './types.js';
 
 export const defaultState = {
@@ -61,6 +62,8 @@ export function ads(state = defaultState.ads, action) {
   switch (action.type) {
     case ADS_LOAD_SUCCESS:
       return { areLoaded: true, data: action.payload };
+    case ADBYID_LOAD_SUCCESS:
+      return { areLoaded: true, data: [action.payload] };
     default:
       return state;
   }
