@@ -1,5 +1,10 @@
-//import { getTags } from '../components/AdvertsPage/service.js';
-import { areTagsLoaded, getAdById } from './selectors.js';
+import {
+  areAdsLoaded,
+  areTagsLoaded,
+  getAdById,
+  getAdIndexById,
+  getAds,
+} from './selectors.js';
 import {
   AUTH_LOGIN_REQUEST,
   AUTH_LOGIN_SUCCESS,
@@ -17,6 +22,10 @@ import {
   ADBYID_LOAD_REQUEST,
   ADBYID_LOAD_SUCCESS,
   ADBYID_LOAD_FAILURE,
+  ADBYID_ERASE_REQUEST,
+  ADBYID_ERASE_SUCCESS,
+  ADBYID_ERASE_FAILURE,
+  ADBYID_ERASE_CANCEL,
 } from './types.js';
 
 export function authLoginRequest() {
@@ -143,6 +152,9 @@ export function adsLoadFailure(error) {
 
 export function getAdsAction() {
   return async function (dispatch, getState, { api }) {
+    //const areLoaded = areAdsLoaded(getState());
+    //if (areLoaded) return;
+
     try {
       dispatch(adsLoadRequest());
       const ads = await api.ads.getAdvertisements();
@@ -173,7 +185,7 @@ export function adByIdLoadFailure(error) {
 }
 
 export function adByIdLoadAction(id) {
-  return async function (dispatch, getState, { api, route }) {
+  return async function (dispatch, getState, { api }) {
     const areLoaded = getAdById(id)(getState());
     if (areLoaded) return;
 
@@ -183,6 +195,45 @@ export function adByIdLoadAction(id) {
       dispatch(adByIdLoadSuccess(advert));
     } catch (error) {
       dispatch(adByIdLoadFailure(error));
+    }
+  };
+}
+
+export function adByIdEraseRequest() {
+  return {
+    type: ADBYID_ERASE_REQUEST,
+  };
+}
+export function adByIdEraseSuccess(ads) {
+  return {
+    type: ADBYID_ERASE_SUCCESS,
+    payload: ads,
+  };
+}
+export function adByIdEraseFailure(error) {
+  return {
+    type: ADBYID_ERASE_FAILURE,
+    payload: error,
+    error: true,
+  };
+}
+export function adByIdEraseCancel() {
+  return {
+    type: ADBYID_ERASE_CANCEL,
+  };
+}
+
+export function adByIdEraseAction(id) {
+  return async function (dispatch, getState, { api, router }) {
+    try {
+      const ads = getAds(getState());
+      const index = getAdIndexById(id)(getState());
+      ads.splice(index, 1);
+      await api.ads.eraseAd(id);
+      dispatch(adByIdEraseSuccess(ads));
+      router.navigate('/');
+    } catch (error) {
+      dispatch(adByIdEraseFailure(error));
     }
   };
 }

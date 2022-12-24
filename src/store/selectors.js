@@ -14,3 +14,9 @@ export const getAds = (state) => (state.ads.areLoaded ? state.ads.data : []);
 
 export const getAdById = (adId) => (state) =>
   state.ads.data.find((ad) => ad.id.toString() === adId);
+
+export const getAdIndexById = (adId) => (state) => {
+  const idsEquals = (element) => element.id.toString() === adId;
+  const index = state.ads.data.findIndex(idsEquals);
+  return index;
+};

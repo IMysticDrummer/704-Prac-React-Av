@@ -1,26 +1,27 @@
-import { Fragment, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Fragment, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Button } from '../common/Button.js';
 import ConfirmElement from '../common/ConfirmElement.js';
 import ErrorElement from '../common/ErrorElement.js';
 import Page from '../Layout/Page.js';
-import { eraseAd } from './service.js';
 import styles from './AdvertPage.module.css';
 import classNames from 'classnames';
 import Spinner from '../common/Spinner.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAdById, getUi } from '../../store/selectors.js';
-import { adByIdLoadAction } from '../../store/actions.js';
+import {
+  adByIdEraseAction,
+  adByIdEraseCancel,
+  adByIdEraseRequest,
+  adByIdLoadAction,
+  uiResetError,
+} from '../../store/actions.js';
 
 const AdvertPage = ({ subTitle }) => {
-  const [error, setError] = useState(null);
-  const [erase, setErase] = useState(false);
-  //const [isFetching, setIsFetching] = useState(false);
   const { id } = useParams();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { isLoading: isFetching } = useSelector(getUi);
+  const { isLoading: isFetching, isErasing: erase, error } = useSelector(getUi);
 
   const advertisement = useSelector(getAdById(id));
 
@@ -28,24 +29,19 @@ const AdvertPage = ({ subTitle }) => {
     dispatch(adByIdLoadAction(id));
   }, [dispatch, id]);
 
-  const resetError = () => setError(null);
+  const resetError = () => dispatch(uiResetError());
 
   const handleEraseAdClick = (event) => {
     event.preventDefault();
-    setErase(true);
+
+    dispatch(adByIdEraseRequest());
   };
 
   const eraseAdResponse = async (eraseResponse) => {
     if (eraseResponse) {
-      try {
-        await eraseAd(id);
-        navigate('/');
-      } catch (error) {
-        setError(error);
-        setErase(false);
-      }
+      dispatch(adByIdEraseAction(id));
     } else {
-      setErase(false);
+      dispatch(adByIdEraseCancel());
     }
   };
 

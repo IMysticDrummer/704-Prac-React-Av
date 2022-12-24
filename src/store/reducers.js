@@ -9,6 +9,7 @@ import {
   AUTH_LOGOUT_REQUEST,
   AUTH_LOGOUT_CANCEL,
   ADBYID_LOAD_SUCCESS,
+  ADBYID_ERASE_SUCCESS,
 } from './types.js';
 
 export const defaultState = {
@@ -27,6 +28,7 @@ export const defaultState = {
   ui: {
     isLoading: false,
     error: null,
+    isErasing: false,
   },
 };
 
@@ -64,6 +66,8 @@ export function ads(state = defaultState.ads, action) {
       return { areLoaded: true, data: action.payload };
     case ADBYID_LOAD_SUCCESS:
       return { areLoaded: true, data: [action.payload] };
+    case ADBYID_ERASE_SUCCESS:
+      return { areLoaded: true, data: action.payload };
     default:
       return state;
   }
@@ -72,27 +76,29 @@ export function ads(state = defaultState.ads, action) {
 export function ui(state = defaultState.ui, action) {
   // Any case in error. For example AUTH_LOGIN_FAILURE
   if (action.error) {
-    return { error: action.payload, isLoading: false };
+    //return { error: action.payload, isLoading: false };
+    return { error: action.payload, isLoading: false, isErasing: false };
   }
 
   if (/_REQUEST$/.test(action.type) && !/_LOGOUT_/.test(action.type)) {
-    return {
-      error: null,
-      isLoading: true,
-    };
+    // return {
+    //   error: null,
+    //   isLoading: true,
+    // };
+    if (/_ERASE_/.test(action.type))
+      return { ...state, isLoading: false, error: null, isErasing: true };
+    return { ...state, isLoading: true, error: null, isErasing: false };
   }
   //Toda acción que acabe en SUCCESS con expresiones regulares
   if (/_SUCCESS$/.test(action.type)) {
-    return {
-      error: null,
-      isLoading: false,
-    };
+    return { ...state, isLoading: false, error: null, isErasing: false };
   }
   if (/_CANCEL$/.test(action.type)) {
     return {
       ...state,
       isLoading: false,
       error: null,
+      isErasing: false,
     };
   }
 
