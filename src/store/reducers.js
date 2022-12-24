@@ -10,6 +10,7 @@ import {
   AUTH_LOGOUT_CANCEL,
   ADBYID_LOAD_SUCCESS,
   ADBYID_ERASE_SUCCESS,
+  NEWAD_SUCCESS,
 } from './types.js';
 
 export const defaultState = {
@@ -68,6 +69,8 @@ export function ads(state = defaultState.ads, action) {
       return { areLoaded: true, data: [action.payload] };
     case ADBYID_ERASE_SUCCESS:
       return { areLoaded: true, data: action.payload };
+    case NEWAD_SUCCESS:
+      return { areLoaded: true, data: [action.payload, ...state.data] };
     default:
       return state;
   }

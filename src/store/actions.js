@@ -4,6 +4,7 @@ import {
   getAdById,
   getAdIndexById,
   getAds,
+  getAdsNumber,
 } from './selectors.js';
 import {
   AUTH_LOGIN_REQUEST,
@@ -26,6 +27,9 @@ import {
   ADBYID_ERASE_SUCCESS,
   ADBYID_ERASE_FAILURE,
   ADBYID_ERASE_CANCEL,
+  NEWAD_REQUEST,
+  NEWAD_SUCCESS,
+  NEWAD_FAILURE,
 } from './types.js';
 
 export function authLoginRequest() {
@@ -126,7 +130,6 @@ export function getTagsAction() {
       dispatch(tagsLoadSuccess(tags));
     } catch (error) {
       dispatch(tagsLoadFailure());
-      //throw error;
     }
   };
 }
@@ -152,8 +155,15 @@ export function adsLoadFailure(error) {
 
 export function getAdsAction() {
   return async function (dispatch, getState, { api }) {
-    //const areLoaded = areAdsLoaded(getState());
-    //if (areLoaded) return;
+    const areLoaded = areAdsLoaded(getState());
+    // Retry charge of advertisements if they're empty, although areLoaded be true
+    // This evite that user get an empty list in this case, when user is not login:
+    //  1- Put in the URL the direct direcction to an advertisement
+    //  2- Application will redirect user to the login Page
+    //  3- User does login and applicaton redirects to the advetisement detail. The rest of advertisements haven't been loaded
+    //  4- User does the advertisement erase
+    //  5- Application redirects to advertisements list. In this case, if we don't force the load of advertisements, user will get an empty advertisements list.
+    if (areLoaded && getAdsNumber(getState())) return;
 
     try {
       dispatch(adsLoadRequest());
@@ -234,6 +244,31 @@ export function adByIdEraseAction(id) {
       router.navigate('/');
     } catch (error) {
       dispatch(adByIdEraseFailure(error));
+    }
+  };
+}
+
+export function newAdRequest() {
+  return { type: NEWAD_REQUEST };
+}
+export function newAdSuccess(ad) {
+  return { type: NEWAD_SUCCESS, payload: ad };
+}
+export function newAdFailure(error) {
+  return { type: NEWAD_FAILURE, payload: error, error: true };
+}
+
+export function newAdAction(ad) {
+  return async function (dispatch, getState, { api, router }) {
+    try {
+      dispatch(newAdRequest());
+      const { id } = await api.ads.postNewAd(ad);
+      const adCreated = await api.ads.getAdById(id);
+      dispatch(newAdSuccess(adCreated));
+      const to = `/adverts/${id}`;
+      router.navigate(to, { replace: true });
+    } catch (error) {
+      dispatch(newAdFailure(error));
     }
   };
 }

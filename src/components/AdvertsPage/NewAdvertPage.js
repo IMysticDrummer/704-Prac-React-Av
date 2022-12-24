@@ -1,16 +1,20 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '../common/Button.js';
 import EnterElement from '../common/EnterElement.js';
 import ErrorElement from '../common/ErrorElement.js';
 import RadioEnter from '../common/RadioEnter.js';
 import SelectElement from '../common/SelectElement.js';
 import Page from '../Layout/Page.js';
-import { postNewAd } from './service.js';
 import styles from './NewAdvertPage.module.css';
 import Spinner from '../common/Spinner.js';
-import { useSelector } from 'react-redux';
-import { getTags } from '../../store/selectors.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { getTags, getUi } from '../../store/selectors.js';
+import {
+  getTagsAction,
+  newAdAction,
+  uiResetError,
+} from '../../store/actions.js';
+import { useEffect } from 'react';
 
 const NewAdvertPage = ({ subTitle }) => {
   const [form, setForm] = useState({
@@ -19,10 +23,14 @@ const NewAdvertPage = ({ subTitle }) => {
     price: '',
     tags: [],
   });
-  const [error, setError] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
-  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const { error, isLoading: isFetching } = useSelector(getUi);
   const tagOptions = useSelector(getTags);
+
+  useEffect(() => {
+    dispatch(getTagsAction());
+  }, [dispatch]);
 
   const disableButton = () => {
     const enable =
@@ -54,7 +62,7 @@ const NewAdvertPage = ({ subTitle }) => {
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
     const formData = new FormData();
@@ -64,19 +72,10 @@ const NewAdvertPage = ({ subTitle }) => {
     formData.append('tags', form.tags);
     if (form.photo) formData.append('photo', form.photo);
 
-    try {
-      setError(null);
-      setIsFetching(true);
-      const response = await postNewAd(formData);
-      const to = `/adverts/${response.id}`;
-      navigate(to, { replace: true });
-    } catch (error) {
-      setError(error);
-    }
-    setIsFetching(false);
+    dispatch(newAdAction(formData));
   };
 
-  const resetError = () => setError(false);
+  const resetError = () => dispatch(uiResetError());
 
   const radioEnterValues = [
     { id: 'sell', value: 'sell', label: 'Sell' },
