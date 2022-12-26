@@ -1,8 +1,8 @@
 import styles from './FiltersAdsElement.module.css';
 import EnterElement from '../common/EnterElement';
-import SelectElement from '../common/SelectElement';
 import Slider from '../common/Slider';
 import RadioEnter from '../common/RadioEnter';
+import SelectTags from '../AdvertsPage/SelectTags/SelectTags';
 
 /**
  * Component to filtering ads.
@@ -25,7 +25,7 @@ const FiltersAdsElement = ({
         {...enterConfig}
         onChange={enterElementHandleChange}
       />
-      <SelectElement
+      <SelectTags
         {...selectConfig}
         onChange={enterElementHandleChange}
         handleReset={enterElementHandleChange}

@@ -66,11 +66,14 @@ export function ads(state = defaultState.ads, action) {
     case ADS_LOAD_SUCCESS:
       return { areLoaded: true, data: action.payload };
     case ADBYID_LOAD_SUCCESS:
-      return { areLoaded: false, data: [action.payload] };
+      return { areLoaded: state.areLoaded, data: [action.payload] };
     case ADBYID_ERASE_SUCCESS:
-      return { areLoaded: true, data: action.payload };
+      return { areLoaded: state.areLoaded, data: action.payload };
     case NEWAD_SUCCESS:
-      return { areLoaded: true, data: [action.payload, ...state.data] };
+      return {
+        areLoaded: state.areLoaded,
+        data: [action.payload, ...state.data],
+      };
     default:
       return state;
   }

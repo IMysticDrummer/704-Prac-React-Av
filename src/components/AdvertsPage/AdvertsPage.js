@@ -21,7 +21,7 @@ import {
 import { Button } from '../common/Button';
 import Spinner from '../common/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAds, getTags, getUi } from '../../store/selectors';
+import { getAds, getUi } from '../../store/selectors';
 import { getAdsAction } from '../../store/actions';
 
 /**
@@ -33,20 +33,17 @@ import { getAdsAction } from '../../store/actions';
  * @returns React.Component
  */
 const AdvertsPage = ({ title, subTitle, className }) => {
-  //const [advertisements, setAdvertisements] = useState();
   const [filters, setFilters] = useState({ sellFilter: '', tags: [] });
-  //const [isFetching, setIsFetching] = useState(false);
   const dispatch = useDispatch();
 
   const advertisements = useSelector(getAds);
-  const tagOptions = useSelector(getTags);
+  //const tagOptions = useSelector(getTags);
   const { isLoading: isFetching } = useSelector(getUi);
 
   const Navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getAdsAction());
-    //dispatch(getTagsAction());
   }, [dispatch]);
 
   const sectionClassName = classNames(className, styles.AdvertsPageCommon, {
@@ -109,7 +106,6 @@ const AdvertsPage = ({ title, subTitle, className }) => {
           enterConfig={{ ...enterFilterConfObject, value: filters.name }}
           selectConfig={{
             ...selectFilterConfObject,
-            options: tagOptions,
             value: filters.tags,
           }}
           radioConfig={{ ...radioFilterConfObject, value: filters.sellFilter }}
