@@ -3,18 +3,13 @@ import { Button } from '../common/Button.js';
 import EnterElement from '../common/EnterElement.js';
 import ErrorElement from '../common/ErrorElement.js';
 import RadioEnter from '../common/RadioEnter.js';
-import SelectElement from '../common/SelectElement.js';
 import Page from '../Layout/Page.js';
 import styles from './NewAdvertPage.module.css';
 import Spinner from '../common/Spinner.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTags, getUi } from '../../store/selectors.js';
-import {
-  getTagsAction,
-  newAdAction,
-  uiResetError,
-} from '../../store/actions.js';
-import { useEffect } from 'react';
+import { getUi } from '../../store/selectors.js';
+import { newAdAction, uiResetError } from '../../store/actions.js';
+import SelectTags from './SelectTags/SelectTags.js';
 
 const NewAdvertPage = ({ subTitle }) => {
   const [form, setForm] = useState({
@@ -26,11 +21,6 @@ const NewAdvertPage = ({ subTitle }) => {
 
   const dispatch = useDispatch();
   const { error, isLoading: isFetching } = useSelector(getUi);
-  const tagOptions = useSelector(getTags);
-
-  useEffect(() => {
-    dispatch(getTagsAction());
-  }, [dispatch]);
 
   const disableButton = () => {
     const enable =
@@ -111,11 +101,10 @@ const NewAdvertPage = ({ subTitle }) => {
           onChange={enterElementHandleChange}
           value={form?.price || ''}
         />
-        <SelectElement
+        <SelectTags
           label='Tags'
           name='tags'
           value={form?.tags || []}
-          options={tagOptions}
           multiple
           onChange={enterElementHandleChange}
         />

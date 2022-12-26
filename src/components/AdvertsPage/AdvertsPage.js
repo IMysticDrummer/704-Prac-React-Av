@@ -37,7 +37,6 @@ const AdvertsPage = ({ title, subTitle, className }) => {
   const dispatch = useDispatch();
 
   const advertisements = useSelector(getAds);
-  //const tagOptions = useSelector(getTags);
   const { isLoading: isFetching } = useSelector(getUi);
 
   const Navigate = useNavigate();
