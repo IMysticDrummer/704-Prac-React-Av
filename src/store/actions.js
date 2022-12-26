@@ -156,6 +156,7 @@ export function adsLoadFailure(error) {
 export function getAdsAction() {
   return async function (dispatch, getState, { api }) {
     const areLoaded = areAdsLoaded(getState());
+    const adsNumber = getAdsNumber(getState());
     // Retry charge of advertisements if they're empty, although areLoaded be true
     // This evite that user get an empty list in this case, when user is not login:
     //  1- Put in the URL the direct direcction to an advertisement
@@ -163,11 +164,14 @@ export function getAdsAction() {
     //  3- User does login and applicaton redirects to the advetisement detail. The rest of advertisements haven't been loaded
     //  4- User does the advertisement erase
     //  5- Application redirects to advertisements list. In this case, if we don't force the load of advertisements, user will get an empty advertisements list.
-    if (areLoaded && getAdsNumber(getState())) return;
+    if (areLoaded && adsNumber) return;
 
     try {
       dispatch(adsLoadRequest());
       const ads = await api.ads.getAdvertisements();
+      if (ads.length) {
+        dispatch(getTagsAction());
+      }
       dispatch(adsLoadSuccess(ads));
     } catch (error) {
       dispatch(adsLoadFailure(error));

@@ -22,7 +22,7 @@ import { Button } from '../common/Button';
 import Spinner from '../common/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAds, getTags, getUi } from '../../store/selectors';
-import { getAdsAction, getTagsAction } from '../../store/actions';
+import { getAdsAction } from '../../store/actions';
 
 /**
  * Advertisement component.
@@ -38,16 +38,15 @@ const AdvertsPage = ({ title, subTitle, className }) => {
   //const [isFetching, setIsFetching] = useState(false);
   const dispatch = useDispatch();
 
-  const tagOptions = useSelector(getTags);
   const advertisements = useSelector(getAds);
+  const tagOptions = useSelector(getTags);
   const { isLoading: isFetching } = useSelector(getUi);
 
   const Navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getTagsAction());
-
     dispatch(getAdsAction());
+    //dispatch(getTagsAction());
   }, [dispatch]);
 
   const sectionClassName = classNames(className, styles.AdvertsPageCommon, {
