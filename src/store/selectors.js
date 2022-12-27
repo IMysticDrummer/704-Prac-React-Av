@@ -12,13 +12,13 @@ export const areAdsLoaded = (state) => state.ads.areLoaded;
 
 export const getAds = (state) => (state.ads.areLoaded ? state.ads.data : []);
 
-export const getAdsNumber = (state) => state.ads.data.length;
+export const getAdsNumber = (state) => state.ads.data?.length || 0;
 
 export const getAdById = (adId) => (state) =>
-  state.ads.data.find((ad) => ad.id.toString() === adId);
+  state.ads.data?.find((ad) => ad.id.toString() === adId) || undefined;
 
 export const getAdIndexById = (adId) => (state) => {
   const idsEquals = (element) => element.id.toString() === adId;
-  const index = state.ads.data.findIndex(idsEquals);
+  const index = state.ads.data?.findIndex(idsEquals);
   return index;
 };

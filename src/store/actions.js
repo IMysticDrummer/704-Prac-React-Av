@@ -92,7 +92,8 @@ export function authLogout(response) {
         const to = router.state.location.state?.from?.pathname || '/';
         router.navigate(to, { replace: true });
       } catch (error) {
-        //TODO tratar el error
+        dispatch(authLogoutCancel());
+        throw error;
       }
     } else {
       dispatch(authLogoutCancel());
@@ -129,7 +130,7 @@ export function getTagsAction() {
       const tags = await api.ads.getTags();
       dispatch(tagsLoadSuccess(tags));
     } catch (error) {
-      dispatch(tagsLoadFailure());
+      dispatch(tagsLoadFailure(error));
     }
   };
 }

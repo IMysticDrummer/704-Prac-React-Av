@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { authLogin, uiResetError } from '../../../store/actions';
-//import * as actions from '../../../store/actions';
 import { defaultState } from '../../../store/reducers';
 import { LoginPage } from '../LoginPage';
 
