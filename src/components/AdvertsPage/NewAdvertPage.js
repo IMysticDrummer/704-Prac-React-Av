@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Button } from '../common/Button.js';
 import EnterElement from '../common/EnterElement.js';
 import ErrorElement from '../common/ErrorElement.js';
@@ -10,45 +9,45 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUi } from '../../store/selectors.js';
 import { newAdAction, uiResetError } from '../../store/actions.js';
 import SelectTags from './SelectTags/SelectTags.js';
+import enhancedForm from '../enhanced/enhancedForm.js';
 
-const NewAdvertPage = ({ subTitle }) => {
-  const [form, setForm] = useState({
-    name: '',
-    sale: true,
-    price: '',
-    tags: [],
-  });
+const NewAdvertPage = ({ subTitle, properties, setProperties, ...props }) => {
+  const { name, sale, price, tags } = properties;
 
   const dispatch = useDispatch();
   const { error, isLoading: isFetching } = useSelector(getUi);
 
   const disableButton = () => {
     const enable =
-      form?.name?.length > 0 &&
-      form?.price > 0 &&
-      form?.tags?.length > 0 &&
-      !isFetching;
+      name?.length > 0 && price > 0 && tags?.length > 0 && !isFetching;
     return !enable;
   };
 
+  /**
+   * This component needs its own change event handel, becouse it manage inputs not controlled by value
+   * @param {*} event
+   */
   const enterElementHandleChange = (event) => {
     if (event.target.name === 'name') {
-      setForm({ ...form, [event.target.name]: event.target.value });
+      setProperties({ ...properties, [event.target.name]: event.target.value });
     }
     if (event.target.name === 'sale') {
       const value = event.target.value === 'sell' ? true : false;
-      setForm({ ...form, [event.target.name]: value });
+      setProperties({ ...properties, [event.target.name]: value });
     }
     if (event.target.name === 'price') {
-      setForm({ ...form, [event.target.name]: event.target.value });
+      setProperties({ ...properties, [event.target.name]: event.target.value });
     }
     if (event.target.name === 'tags') {
       const { selectedOptions } = event.target;
       const tags = [...selectedOptions].map((value) => value.value);
-      setForm({ ...form, [event.target.name]: tags });
+      setProperties({ ...properties, [event.target.name]: tags });
     }
     if (event.target.name === 'photo') {
-      setForm({ ...form, [event.target.name]: event.target.files[0] });
+      setProperties({
+        ...properties,
+        [event.target.name]: event.target.files[0],
+      });
     }
   };
 
@@ -56,11 +55,11 @@ const NewAdvertPage = ({ subTitle }) => {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('name', form.name);
-    formData.append('sale', form.sale);
-    formData.append('price', form.price);
-    formData.append('tags', form.tags);
-    if (form.photo) formData.append('photo', form.photo);
+    formData.append('name', name);
+    formData.append('sale', sale);
+    formData.append('price', price);
+    formData.append('tags', tags);
+    if (properties.photo) formData.append('photo', properties.photo);
 
     dispatch(newAdAction(formData));
   };
@@ -85,13 +84,13 @@ const NewAdvertPage = ({ subTitle }) => {
           type='input'
           name='name'
           onChange={enterElementHandleChange}
-          value={form?.name || ''}
+          value={name || ''}
         />
         <RadioEnter
           label='Sale'
           name='sale'
           values={radioEnterValues}
-          value={form?.sale ? 'sell' : 'buy'}
+          value={sale ? 'sell' : 'buy'}
           onChange={enterElementHandleChange}
         />
         <EnterElement
@@ -99,12 +98,12 @@ const NewAdvertPage = ({ subTitle }) => {
           type='number'
           name='price'
           onChange={enterElementHandleChange}
-          value={form?.price || ''}
+          value={price || ''}
         />
         <SelectTags
           label='Tags'
           name='tags'
-          value={form?.tags || []}
+          value={tags || []}
           multiple
           onChange={enterElementHandleChange}
         />
@@ -132,4 +131,12 @@ const NewAdvertPage = ({ subTitle }) => {
   );
 };
 
-export default NewAdvertPage;
+const initialData = {
+  name: '',
+  sale: true,
+  price: '',
+  tags: [],
+};
+
+const EnhancedNewAdvertPage = enhancedForm(NewAdvertPage, initialData);
+export default EnhancedNewAdvertPage;

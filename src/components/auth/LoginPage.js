@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import EnterElement from '../common/EnterElement';
 import classNames from 'classnames';
 import styles from './LoginPage.module.css';
@@ -10,25 +9,18 @@ import Spinner from '../common/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { authLogin, uiResetError } from '../../store/actions';
 import { getUi } from '../../store/selectors';
+import enhancedForm from '../enhanced/enhancedForm';
 
-export const LoginPage = ({ className, ...props }) => {
-  const [password, setPassword] = useState([]);
-  const [email, setEmail] = useState([]);
-  const [remember, setRemember] = useState(false);
+export const LoginPage = ({
+  className,
+  properties,
+  onChange: enterElementHandleChange,
+  ...props
+}) => {
   const dispatch = useDispatch();
   const { isLoading: isFetching, error } = useSelector(getUi);
 
-  const enterElementHandleChange = (event) => {
-    if (event.target.name === 'password') {
-      setPassword(event.target.value);
-    }
-    if (event.target.name === 'email') {
-      setEmail(event.target.value);
-    }
-    if (event.target.name === 'remember') {
-      setRemember((remember) => !remember);
-    }
-  };
+  const { password, email, remember } = properties;
 
   const disableButton = () => {
     return !(email.length !== 0 && password.length !== 0 && !isFetching);
@@ -99,7 +91,16 @@ export const LoginPage = ({ className, ...props }) => {
   );
 };
 
-const StyledLoginPage = styled(LoginPage)`
+const initialData = {
+  password: '',
+  email: '',
+  remember: false,
+};
+
+const EnhancedLoginPage = enhancedForm(LoginPage, initialData);
+
+//const StyledLoginPage = styled(LoginPage)`
+const StyledLoginPage = styled(EnhancedLoginPage)`
   background-color: ${'var(--main-bg-color)' || 'lightblue'};
   color: ${'var(--main-color)' || 'darkblue'};
 `;
