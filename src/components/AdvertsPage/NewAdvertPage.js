@@ -138,5 +138,5 @@ const initialData = {
   tags: [],
 };
 
-const EnhancedNewAdvertPage = enhancedForm(NewAdvertPage, initialData);
+const EnhancedNewAdvertPage = enhancedForm(initialData)(NewAdvertPage);
 export default EnhancedNewAdvertPage;

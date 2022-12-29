@@ -12,26 +12,30 @@ import { useState } from 'react';
  *
  * *setProperties*: transmit the inner state handle to let the user build his own event change handle.
  */
-export default function enhancedForm(EnhancedForm, initialData, onSubmit) {
-  const WithLogicForm = (props) => {
-    const [properties, setProperties] = useState(initialData);
+export default function enhancedForm(initialData) {
+  return function (EnhancedForm) {
+    const WithLogicForm = (props) => {
+      const [properties, setProperties] = useState(initialData);
 
-    const inputHandleChange = (event) => {
-      setProperties({ ...properties, [event.target.name]: event.target.value });
+      const inputHandleChange = (event) => {
+        setProperties({
+          ...properties,
+          [event.target.name]: event.target.value,
+        });
+      };
+
+      //We'll send the setProperties method to let the enhanced forms to create their own handles and set to the general state
+      return (
+        <EnhancedForm
+          {...props}
+          properties={properties}
+          onChange={inputHandleChange}
+          setProperties={setProperties}
+        />
+      );
     };
 
-    //We'll send the setProperties method to let the enhanced forms to create their own handles and set to the general state
-    return (
-      <EnhancedForm
-        {...props}
-        properties={properties}
-        onChange={inputHandleChange}
-        setProperties={setProperties}
-        onSubmit={onSubmit}
-      />
-    );
+    WithLogicForm.displayName = `WithLogicForm ${EnhancedForm.name}`;
+    return WithLogicForm;
   };
-
-  WithLogicForm.displayName = `WithLogicForm ${EnhancedForm.name}`;
-  return WithLogicForm;
 }

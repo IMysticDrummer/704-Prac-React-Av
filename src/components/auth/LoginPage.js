@@ -97,7 +97,7 @@ const initialData = {
   remember: false,
 };
 
-const EnhancedLoginPage = enhancedForm(LoginPage, initialData);
+const EnhancedLoginPage = enhancedForm(initialData)(LoginPage);
 
 //const StyledLoginPage = styled(LoginPage)`
 const StyledLoginPage = styled(EnhancedLoginPage)`

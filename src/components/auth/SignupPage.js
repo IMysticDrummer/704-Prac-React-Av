@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import EnterElement from '../common/EnterElement';
 import classNames from 'classnames';
 import styles from './LoginPage.module.css';
@@ -16,31 +15,20 @@ import {
   uiResetError,
 } from '../../store/actions';
 import { getUi } from '../../store/selectors';
+import enhancedForm from '../enhanced/enhancedForm';
 
-const SignupPage = ({ className, ...props }) => {
-  const [username, setUsername] = useState([]);
-  const [password, setPassword] = useState([]);
-  const [email, setEmail] = useState([]);
-  const [name, setName] = useState([]);
+const SignupPage = ({
+  className,
+  properties,
+  onChange: enterElementHandleChange,
+  ...props
+}) => {
+  const { username, password, email, name } = properties;
+
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoading: isFetching, error } = useSelector(getUi);
-
-  const enterElementHandleChange = (event) => {
-    if (event.target.name === 'username') {
-      setUsername(event.target.value);
-    }
-    if (event.target.name === 'password') {
-      setPassword(event.target.value);
-    }
-    if (event.target.name === 'email') {
-      setEmail(event.target.value);
-    }
-    if (event.target.name === 'name') {
-      setName(event.target.value);
-    }
-  };
 
   const disableButton = () => {
     return !(
@@ -113,7 +101,8 @@ const SignupPage = ({ className, ...props }) => {
         <Button
           variant='primary'
           type='submit'
-          disabled={disableButton()}>
+          disabled={disableButton()}
+        >
           Sign Up
         </Button>
       </form>
@@ -135,7 +124,16 @@ const SignupPage = ({ className, ...props }) => {
   );
 };
 
-const StyledSignupPage = styled(SignupPage)`
+const initialData = {
+  username: '',
+  password: '',
+  email: '',
+  name: '',
+};
+
+const EnhancedSignupPage = enhancedForm(initialData)(SignupPage);
+
+const StyledSignupPage = styled(EnhancedSignupPage)`
   background-color: ${'var(--main-bg-color)' || 'lightblue'};
   color: ${'var(--main-color)' || 'darkblue'};
 `;
