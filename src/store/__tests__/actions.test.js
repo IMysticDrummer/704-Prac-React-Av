@@ -286,10 +286,230 @@ describe('Asynchronic actions tests', () => {
       jest.spyOn(selectors, 'areTagsLoaded').mockReturnValue(true);
       api.ads.getTags = jest.fn();
 
+      await action(dispatch, getState, { api });
       expect.assertions(1);
       expect(dispatch).not.toHaveBeenCalled();
 
       jest.spyOn(selectors, 'areAdsLoaded').mockRestore();
+    });
+  });
+
+  describe('getAdsAction tests', () => {
+    const action = actions.getAdsAction();
+    const api = { ads: {} };
+    jest.spyOn(selectors, 'areAdsLoaded').mockReturnValue(false);
+    jest.spyOn(selectors, 'getAdsNumber').mockReturnValue(0);
+
+    it('should follow the ads load flow if ads are not loaded, and adsNumber=0', async () => {
+      api.ads.getAdvertisements = jest.fn().mockResolvedValue('ads');
+
+      await action(dispatch, getState, { api });
+
+      expect.assertions(3);
+      expect(dispatch).toHaveBeenNthCalledWith(1, actions.adsLoadRequest());
+      expect(api.ads.getAdvertisements).toHaveBeenCalled();
+      expect(dispatch).toHaveBeenNthCalledWith(
+        2,
+        actions.adsLoadSuccess('ads')
+      );
+      api.ads = {};
+    });
+
+    it('should follow the error flow if ads are not loaded, adsNumber=0, and thers an error getting advertisements', async () => {
+      api.ads.getAdvertisements = jest.fn().mockRejectedValue('error');
+
+      try {
+        await action(dispatch, getState, { api });
+      } catch (error) {
+        expect.assertions(2);
+        expect(error).toBe('error');
+        expect(dispatch).toHaveBeenCalledWith(actions.adsLoadFailure('error'));
+      }
+    });
+
+    it('should follow the normal flow if adsLoaded flag is false although adsNumber>0', async () => {
+      jest.spyOn(selectors, 'getAdsNumber').mockReturnValue(5);
+      api.ads.getAdvertisements = jest.fn().mockResolvedValue('ads');
+
+      await action(dispatch, getState, { api });
+
+      expect.assertions(3);
+      expect(dispatch).toHaveBeenNthCalledWith(1, actions.adsLoadRequest());
+      expect(api.ads.getAdvertisements).toHaveBeenCalled();
+      expect(dispatch).toHaveBeenNthCalledWith(
+        2,
+        actions.adsLoadSuccess('ads')
+      );
+      api.ads = {};
+    });
+
+    it('should follow the normal flow if ads are loaded, but, adsNumber=0', async () => {
+      jest.spyOn(selectors, 'areAdsLoaded').mockReturnValue(true);
+      api.ads.getAdvertisements = jest.fn().mockResolvedValue('ads');
+
+      await action(dispatch, getState, { api });
+
+      expect.assertions(3);
+      expect(dispatch).toHaveBeenNthCalledWith(1, actions.adsLoadRequest());
+      expect(api.ads.getAdvertisements).toHaveBeenCalled();
+      expect(dispatch).toHaveBeenNthCalledWith(
+        2,
+        actions.adsLoadSuccess('ads')
+      );
+      api.ads = {};
+    });
+
+    it('should return without ads loading if flag areLoaded is true and adsNumber>0', async () => {
+      jest.spyOn(selectors, 'areAdsLoaded').mockReturnValue(true);
+      jest.spyOn(selectors, 'getAdsNumber').mockReturnValue(5);
+
+      await action(dispatch, getState, { api });
+
+      expect.assertions(1);
+      expect(dispatch).not.toHaveBeenCalled();
+      api.ads = {};
+    });
+
+    jest.spyOn(selectors, 'areAdsLoaded').mockRestore();
+    jest.spyOn(selectors, 'getAdsNumber').mockRestore();
+  });
+
+  describe('adByIdLoadAction tests', () => {
+    const action = actions.adByIdLoadAction('1');
+    const api = { ads: {} };
+
+    it("should follow the normal flow if there's no ads with identical id in the state", async () => {
+      const id = '1';
+      selectors.getAdById = function (id) {
+        return function (state) {
+          jest.fn().mockReturnValue(undefined);
+        };
+      };
+
+      api.ads.getAdById = jest.fn().mockResolvedValue(id);
+
+      await action(dispatch, getState, { api });
+
+      expect.assertions(3);
+      expect(dispatch).toHaveBeenNthCalledWith(1, actions.adByIdLoadRequest());
+      expect(api.ads.getAdById).toHaveBeenCalledWith(id);
+      expect(dispatch).toHaveBeenNthCalledWith(
+        2,
+        actions.adByIdLoadSuccess(id)
+      );
+
+      jest.spyOn(selectors, 'getAdById').mockRestore();
+    });
+
+    it("should follow the failure flow if there's an error retrieving the ad", async () => {
+      const id = '1';
+      selectors.getAdById = (id) => (state) =>
+        jest.fn().mockReturnValue(undefined);
+
+      api.ads.getAdById = jest.fn().mockRejectedValue('error');
+      try {
+        await action(dispatch, getState, { api });
+      } catch (error) {
+        expect.assertions(2);
+        expect(error).toBe('error');
+        expect(dispatch).toHaveBeenCalledWith(actions.adByIdLoadFailure(error));
+      }
+
+      jest.spyOn(selectors, 'getAdById').mockRestore();
+    });
+
+    it('should not load ad if the ad is in the state', async () => {
+      const id = '1';
+      selectors.getAdById = (id) => (getState) =>
+        jest.fn().mockReturnValue(true);
+
+      await action(dispatch, getState, { api });
+
+      expect.assertions(1);
+      expect(dispatch).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('adByIdEraseAction tests', () => {
+    const api = { ads: {} };
+    const id = '1';
+    const index = 0;
+    const ads = ['ads'];
+    const action = actions.adByIdEraseAction(id);
+
+    afterEach(() => jest.resetModules());
+    afterAll(() => jest.resetAllMocks());
+
+    it('should follow the normal flow when everything is ok', async () => {
+      selectors.getAds = jest.fn().mockReturnValue(ads);
+      selectors.getAdIndexById = jest.fn(() => () => index);
+      api.ads.eraseAd = jest.fn().mockResolvedValue();
+
+      await action(dispatch, getState, { api, router });
+
+      expect.assertions(5);
+      expect(selectors.getAds).toHaveBeenCalled();
+      expect(selectors.getAdIndexById).toHaveBeenCalled();
+      expect(api.ads.eraseAd).toHaveBeenCalledWith(id);
+      expect(dispatch).toHaveBeenCalledWith(actions.adByIdEraseSuccess(ads));
+      expect(router.navigate).toHaveBeenCalledWith('/');
+    });
+    it('should dispatch an error if something goes wrong', async () => {
+      selectors.getAds = jest.fn().mockReturnValue(ads);
+      selectors.getAdIndexById = jest.fn(() => () => index);
+      api.ads.eraseAd = jest.fn().mockRejectedValue('error');
+      try {
+        await action(dispatch, getState, { api, router });
+      } catch (error) {
+        expect.assertions(2);
+        expect(error).toBe('error');
+        expect(dispatch).toHaveBeenCalledWith(
+          actions.adByIdEraseFailure(error)
+        );
+      }
+    });
+  });
+
+  describe('newAdAction test', () => {
+    const ad = 'ad';
+    const id = '1';
+    const api = { ads: {} };
+    const action = actions.newAdAction(ad);
+
+    it('should follow the normal flow', async () => {
+      api.ads.postNewAd = jest.fn().mockResolvedValue({ id, data: ad });
+      api.ads.getAdById = jest.fn().mockResolvedValue([ad]);
+      const to = `/adverts/${id}`;
+
+      await action(dispatch, getState, { api, router });
+
+      expect.assertions(3);
+      expect(dispatch).toHaveBeenNthCalledWith(1, actions.newAdRequest());
+      expect(dispatch).toHaveBeenNthCalledWith(2, actions.newAdSuccess([ad]));
+      expect(router.navigate).toHaveBeenCalledWith(to, { replace: true });
+    });
+
+    it('should return failure if the ad has not been saved', async () => {
+      api.ads.postNewAd = jest.fn().mockRejectedValue('error');
+      try {
+        await action(dispatch, getState, { api, router });
+      } catch (error) {
+        expect.assertions(2);
+        expect(error).toBe('error');
+        expect(dispatch).toHaveBeenCalledWith(actions.newAdFailure(error));
+      }
+    });
+
+    it('should return failure if the ad has not been find after saved', async () => {
+      api.ads.postNewAd = jest.fn().mockResolvedValue({ id, data: ad });
+      api.ads.getAdById = jest.fn().mockRejectedValue('error');
+      try {
+        await action(dispatch, getState, { api, router });
+      } catch (error) {
+        expect.assertions(2);
+        expect(error).toBe('error');
+        expect(dispatch).toHaveBeenCalledWith(actions.newAdFailure(error));
+      }
     });
   });
 });

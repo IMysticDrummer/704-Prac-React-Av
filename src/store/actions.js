@@ -170,9 +170,6 @@ export function getAdsAction() {
     try {
       dispatch(adsLoadRequest());
       const ads = await api.ads.getAdvertisements();
-      // if (ads.length) {
-      //   dispatch(getTagsAction());
-      // }
       dispatch(adsLoadSuccess(ads));
     } catch (error) {
       dispatch(adsLoadFailure(error));
