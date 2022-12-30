@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { authLogin, uiResetError } from '../../../store/actions';
 import { defaultState } from '../../../store/reducers';
-import { LoginPage } from '../LoginPage';
+import { EnhancedLoginPage } from '../LoginPage';
 
 jest.mock('../../../store/actions');
 
@@ -26,14 +26,14 @@ describe('Test de la página LoginPage', () => {
   const renderComponent = (store) =>
     render(
       <Provider store={store}>
-        <LoginPage />
+        <EnhancedLoginPage />
       </Provider>
     );
 
   const validCredentials = {
     email: 'prueba@yo.com',
     password: '123456',
-    remember: true,
+    remember: 'on',
   };
 
   test('Snapshot', () => {

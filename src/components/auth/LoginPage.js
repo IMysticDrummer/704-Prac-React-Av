@@ -11,7 +11,7 @@ import { authLogin, uiResetError } from '../../store/actions';
 import { getUi } from '../../store/selectors';
 import enhancedForm from '../enhanced/enhancedForm';
 
-export const LoginPage = ({
+const LoginPage = ({
   className,
   properties,
   onChange: enterElementHandleChange,
@@ -28,7 +28,6 @@ export const LoginPage = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
     dispatch(authLogin({ email, password, remember }));
   };
 
@@ -97,7 +96,7 @@ const initialData = {
   remember: false,
 };
 
-const EnhancedLoginPage = enhancedForm(initialData)(LoginPage);
+export const EnhancedLoginPage = enhancedForm(initialData)(LoginPage);
 
 //const StyledLoginPage = styled(LoginPage)`
 const StyledLoginPage = styled(EnhancedLoginPage)`

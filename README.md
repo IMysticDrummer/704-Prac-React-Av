@@ -1,6 +1,18 @@
-# NODEPOP practise to KeepCoding Full Stack Web 13
+# NODEPOPAV practise to KeepCoding Full Stack Web 13
 
 In the bass part you can access to the instructions incorporated by `create-react-app`.
+
+**NOTES Avanced Version**  
+Signup and Login separated, in two differents files. But I keep the presentation in the same web page. This is not normal in a practical web page, but I prefer don't make another page, to keep de practise simple.  
+Both parts use the same user interface selectors, so an error loging in or signing up will show the error element in both.  
+_Develope notes_:
+
+- It has been used high order component to take the common logic of login, signup and newAdvertisement, in the same place.
+  - In the case of newAdvertisement, and possible future uses of the component, I've prepared the possibility to use the change event handle of the HOC, or use the setState function, passed by props, to let the programmer create his own handle.
+- Testing ready with the instruction: `npm run test`
+- Start the development mode with : `npm run start`. **Don't forget start first the nodepop-api application!!**
+- Redux controls all the actions with the store
+- Redux Dev Tools configurated.
 
 ## How's build this app
 
